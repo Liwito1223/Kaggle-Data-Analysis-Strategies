@@ -1,0 +1,11 @@
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+Dataset/
+reference_notebook/
+.claude/
+.DS_Store
+*.parquet
+models/
+jane_street_solutions_benchmark/
+resourceMonitor/

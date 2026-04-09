@@ -1,0 +1,124 @@
+# 实验配置文件
+# 使用此文件定义要测试的参数组合
+
+# 基础配置（所有实验共享）
+base_config:
+  # 数据配置
+  data:
+    n_train_dates: 15        # 训练集天数
+    n_valid_dates: 15        # 验证集天数
+    n_symbols: 20            # 使用的股票数
+    train_file: "./processed_data/training.parquet"
+    valid_file: "./processed_data/validation.parquet"
+
+  # 特征配置
+  features:
+    feature_cols: "auto"  # auto表示使用默认的88个特征
+    target_col: "responder_6"
+    weight_col: "weight"
+
+  # 训练配置
+  training:
+    seed: 42
+    n_folds: 3
+    early_stopping_rounds: 50
+
+  # 系统配置
+  system:
+    device: "cpu"
+    model_output_dir: "./models"
+
+
+# 网格搜索配置
+# 定义要搜索的参数空间
+grid_search:
+  # LightGBM参数搜索
+  lgbm_params:
+    learning_rate: [0.01, 0.03, 0.05, 0.1]
+    max_depth: [4, 6, 8]
+    num_leaves: [32, 64, 128]
+    min_data_in_leaf: [100, 500, 1000]
+    n_estimators: [300, 500, 1000]
+
+  # 数据采样参数
+  data_params:
+    n_train_dates: [10, 15, 20, 30]
+    n_valid_dates: [10, 15, 20, 30]
+    n_symbols: [10, 20, 50, 100]
+
+
+# 预设实验配置
+# 可以直接运行的预设参数组合
+experiments:
+  # 快速测试配置（少量数据，快速迭代）
+  quick_test:
+    name: "快速测试"
+    n_train_dates: 10
+    n_valid_dates: 10
+    n_symbols: 10
+    n_estimators: 200
+    learning_rate: 0.1
+    max_depth: 4
+    num_leaves: 32
+
+  # 标准配置
+  standard:
+    name: "标准配置"
+    n_train_dates: 15
+    n_valid_dates: 15
+    n_symbols: 20
+    n_estimators: 500
+    learning_rate: 0.05
+    max_depth: 6
+    num_leaves: 64
+
+  # 小数据集（快速测试不同模型）
+  small_data:
+    name: "小数据集"
+    n_train_dates: 50
+    n_valid_dates: 10
+    n_symbols: 10
+    n_estimators: 300
+    learning_rate: 0.05
+    max_depth: 5
+    num_leaves: 48
+
+  # 中等数据集
+  medium_data:
+    name: "中等数据集"
+    n_train_dates: 200
+    n_valid_dates: 50
+    n_symbols: 20
+    n_estimators: 500
+    learning_rate: 0.03
+    max_depth: 6
+    num_leaves: 64
+
+  # 大数据集（接近全量数据）
+  large_data:
+    name: "大数据集"
+    n_train_dates: 600
+    n_valid_dates: 100
+    n_symbols: 39
+    n_estimators: 1000
+    learning_rate: 0.02
+    max_depth: 8
+    num_leaves: 128
+
+  # 全部股票（少量天数）
+  all_symbols_short:
+    name: "全部股票_短期"
+    n_train_dates: 100
+    n_valid_dates: 20
+    n_symbols: 39
+    n_estimators: 500
+    learning_rate: 0.05
+    max_depth: 6
+    num_leaves: 64
+
+
+# 实验标签
+tags:
+  - "lightgbm"
+  - "grid_search"
+  - "parameter_tuning"
